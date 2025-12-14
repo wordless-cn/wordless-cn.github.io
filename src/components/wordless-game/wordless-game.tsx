@@ -15,6 +15,8 @@ export interface WordlessGameProps {
   isListedWord: (word: string) => boolean;
 }
 
+const tries = 6;
+
 export default function WordlessGame({
   word,
   isListedWord,
@@ -23,7 +25,7 @@ export default function WordlessGame({
   const { rendered, keys, message, backspace, input, submit } =
     useWordlessGameState({
       answer: word,
-      tries: 6,
+      tries,
       isListedWord,
     });
 
@@ -71,7 +73,11 @@ export default function WordlessGame({
         ))}
       </div>
       <div className="h-8 flex flex-col items-center justify-center uppercase">
-        {message ? <div>{message?.content}</div> : undefined}
+        {message ? (
+          <div>{message?.content}</div>
+        ) : (
+          <div>{`猜一个${word.length}个字母的单词，你一共有${tries}次机会`}</div>
+        )}
       </div>
       <Keyboard
         keyStates={keys}

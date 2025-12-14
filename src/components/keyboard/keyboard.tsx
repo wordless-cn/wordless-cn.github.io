@@ -33,12 +33,12 @@ export default function Keyboard({
               tabIndex={-1}
               key={char}
               className={clsx(
-                "flex w-9 h-11 items-center justify-center text-xl bg-gray-900 rounded overflow-hidden uppercase max-w-14",
+                "flex w-9 h-11 items-center justify-center text-xl rounded overflow-hidden uppercase max-w-14",
                 Object.hasOwn(display, char) ? "flex-1" : "flex-none",
                 {
-                  [KEY_INCLUDED]: "bg-green-700",
+                  [KEY_INCLUDED]: "bg-gray-700 text-gray-100",
                   [KEY_EXCLUDED]: "bg-gray-950 text-gray-600",
-                }[keyStates[char]],
+                }[keyStates[char]] || "bg-gray-900 text-gray-300",
               )}
               onClick={(event) => {
                 onKeyPressed(char);

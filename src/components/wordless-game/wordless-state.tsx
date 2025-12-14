@@ -263,7 +263,15 @@ function submit(
         `${game.total}次猜中失败，单词为：${game.answer.join("")}`,
       );
     } else {
-      game.message = undefined;
+      const included = game.rendered[game.index - 1].chars.filter(
+        (x) => x.result !== CHAR_EXCLUDED,
+      ).length;
+      const matched = game.rendered[game.index - 1].chars.filter(
+        (x) => x.result === CHAR_MATCH,
+      ).length;
+      game.message = newMessage(
+        `猜中${included}个字母，其中${matched}个位置正确`,
+      );
     }
   };
 }
