@@ -22,6 +22,7 @@ export default function Word() {
       />
       <div className="flex item-center justify-center px-4 pt-8">
         <NavLink
+          key={word.word}
           to={`/book/${bookId}`}
           className="px-2 h-8 text-gray-500 overflow-hidden rounded bg-gray-900 flex items-center justify-center"
         >

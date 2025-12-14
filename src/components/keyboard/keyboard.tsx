@@ -30,6 +30,7 @@ export default function Keyboard({
           {chars.map((char) => (
             <button
               type="button"
+              tabIndex={-1}
               key={char}
               className={clsx(
                 "flex w-9 h-11 items-center justify-center text-xl bg-gray-900 rounded overflow-hidden uppercase max-w-14",
@@ -39,7 +40,10 @@ export default function Keyboard({
                   [KEY_EXCLUDED]: "bg-gray-950 text-gray-600",
                 }[keyStates[char]],
               )}
-              onClick={() => onKeyPressed(char)}
+              onClick={(event) => {
+                onKeyPressed(char);
+                event.currentTarget.blur();
+              }}
             >
               <div>{display[char] || char}</div>
             </button>
