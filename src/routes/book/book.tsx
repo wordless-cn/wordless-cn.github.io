@@ -12,7 +12,7 @@ export default function Book() {
         <div>{book.title}</div>
         <NavLink
           to="/select-book"
-          className="rounded px-2 py-1 bg-gray-900 hover:bg-gray-800"
+          className="rounded px-2 py-1 bg-gray-100 text-gray-500 dark:bg-gray-900 dark:text-gray-500"
         >
           切换单词表
         </NavLink>

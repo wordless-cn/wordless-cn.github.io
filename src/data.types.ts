@@ -29,6 +29,13 @@ export interface Word {
   word: string;
 }
 
+export interface WordWithTranslation {
+  id: string;
+  word: string;
+  translations: Translation[];
+  phrases: Phrase[];
+}
+
 export interface Translation {
   type: string;
   translation: string;

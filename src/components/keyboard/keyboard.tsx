@@ -36,9 +36,12 @@ export default function Keyboard({
                 "flex w-9 h-11 items-center justify-center text-xl rounded overflow-hidden uppercase max-w-14",
                 Object.hasOwn(display, char) ? "flex-1" : "flex-none",
                 {
-                  [KEY_INCLUDED]: "bg-gray-700 text-gray-100",
-                  [KEY_EXCLUDED]: "bg-gray-950 text-gray-600",
-                }[keyStates[char]] || "bg-gray-900 text-gray-300",
+                  [KEY_INCLUDED]:
+                    "bg-gray-300 text-gray-900 dark:bg-gray-700 dark:text-gray-100",
+                  [KEY_EXCLUDED]:
+                    "bg-gray-50 text-gray-200 dark:bg-gray-950 dark:text-gray-600",
+                }[keyStates[char]] ||
+                  "bg-gray-100 text-gray-500 dark:bg-gray-900 dark:text-gray-300",
               )}
               onClick={(event) => {
                 onKeyPressed(char);
