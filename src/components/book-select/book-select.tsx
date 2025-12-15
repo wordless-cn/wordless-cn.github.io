@@ -10,7 +10,7 @@ export function BookSelect() {
         {books.map((book) => (
           <li key={book.id}>
             <NavLink
-              className="group flex justify-between items-center gap-3 self-stretch px-4 py-3 leading-normal rounded-2xl bg-gray-900 hover:bg-gray-800 transition-colors"
+              className="group flex justify-between items-center gap-3 self-stretch px-4 py-3 leading-normal rounded-2xl bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
               to={`/book/${book.id}`}
               rel="noreferrer"
             >
