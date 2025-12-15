@@ -34,7 +34,19 @@ export default function WordlessGame({
       isListedWord,
     });
   const [showDefinition, setShowDefinition] = useState(false);
-  console.log({ detail });
+  useEffect(() => {
+    if (showDefinition) {
+      document.body.style.overflow = "hidden";
+      document.body.style.overscrollBehaviorY = "none";
+    } else {
+      document.body.style.overflow = "";
+      document.body.style.overscrollBehaviorY = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+      document.body.style.overscrollBehaviorY = "";
+    };
+  }, [showDefinition]);
   useEffect(() => {
     const listener = (ev: KeyboardEvent) => {
       const key = ev.key.toLowerCase();
@@ -109,30 +121,40 @@ export default function WordlessGame({
       />
       {showDefinition && detail ? (
         <div
-          className="fixed top-0 left-0 w-full h-full z-50 backdrop-blur-md flex items-center justify-center p-8 pb-[25vh] bg-gray-50/50 text-gray-800 dark:bg-gray-950/50 dark:text-gray-200"
+          className="fixed top-0 left-0 w-full h-full z-50 backdrop-blur-md flex items-center justify-center bg-gray-50/80 text-gray-800 dark:bg-gray-950/80 dark:text-gray-200"
           onClick={() => setShowDefinition(false)}
         >
-          <div className="p-8" onClick={(e) => e.stopPropagation()}>
-            <div className="text-xl">
-              <strong>{detail.word}</strong>
-            </div>
-            <div className="mt-2">
-              {detail.translations.map((trans) => (
-                <div>
-                  <i>{trans.type}.&nbsp;&nbsp;</i>
-                  <span>{trans.translation}</span>
-                </div>
-              ))}
-            </div>
-            <div className="mt-2">
-              {detail.phrases.map((phrase) => (
-                <div className="mt-1">
-                  <div>{phrase.phrase}</div>
-                  <div className="text-sm text-gray-600 dark:text-gray-400">
-                    {phrase.translation}
+          <div className="px-8 py-16 overflow-y-auto w-full max-h-full">
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="p-2 w-fit min-w-64 max-w-full mx-auto"
+            >
+              <div className="text-xl">
+                <strong>{detail.word}</strong>
+              </div>
+              <div className="mt-2">
+                {detail.translations.map((trans) => (
+                  <div>
+                    <i>{trans.type}.&nbsp;&nbsp;</i>
+                    <span>{trans.translation}</span>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              <div className="mt-2">
+                {detail.phrases.map((phrase) => (
+                  <div className="mt-1">
+                    <div>{phrase.phrase}</div>
+                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                      {phrase.translation}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="mt-4">
+              <div className="text-sm text-center text-gray-600 dark:text-gray-400">
+                （点击此处或屏幕边缘空白处退出）
+              </div>
             </div>
           </div>
         </div>
