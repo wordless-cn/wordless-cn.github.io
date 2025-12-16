@@ -59,9 +59,9 @@ export default function WordlessGame({
         input(key);
       }
     };
-    window.addEventListener("keyup", listener);
+    window.addEventListener("keydown", listener);
     return () => {
-      window.removeEventListener("keyup", listener);
+      window.removeEventListener("keydown", listener);
     };
   }, [backspace, input, submit]);
 
