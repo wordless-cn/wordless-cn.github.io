@@ -77,6 +77,7 @@ export default function useWordlessGameState({
     message: game.message,
     input: useCallback((char: string) => setGame(produce(input(char))), []),
     backspace: useCallback(() => setGame(produce(backspace())), []),
+    giveup: useCallback(() => setGame(produce(giveup())), []),
     submit: useCallback(
       () => setGame(produce(submit(isListedWord))),
       [isListedWord],
@@ -273,6 +274,18 @@ function submit(
         `猜中${included}个字母，其中${matched}个位置正确`,
       );
     }
+  };
+}
+
+function giveup(): GameStateRecipe {
+  return (game) => {
+    if (game.state !== GAME_PLAYING) {
+      print(`giveup is forbidden: game state=${game.state}`);
+      return;
+    }
+    print(`submit: game over`);
+    game.state = GAME_OVER;
+    game.message = newMessage(`已认输，要猜的单词为：${game.answer.join("")}`);
   };
 }
 

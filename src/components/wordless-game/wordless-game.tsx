@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { NavLink } from "react-router";
 import type { WordWithTranslation } from "~/data.types";
 import Keyboard from "../keyboard/keyboard";
 import useWordlessGameState, {
@@ -14,6 +15,7 @@ import useWordlessGameState, {
 } from "./wordless-state";
 
 export interface WordlessGameProps {
+  bookId: string;
   word: string;
   detail?: WordWithTranslation;
   isListedWord: (word: string) => boolean;
@@ -22,17 +24,19 @@ export interface WordlessGameProps {
 const tries = 6;
 
 export default function WordlessGame({
+  bookId,
   word,
   detail,
   isListedWord,
 }: WordlessGameProps) {
   console.log("render wordless game =>", word);
-  const { rendered, state, keys, message, backspace, input, submit } =
-    useWordlessGameState({
-      answer: word,
-      tries,
-      isListedWord,
-    });
+
+  const game = useWordlessGameState({
+    answer: word,
+    tries,
+    isListedWord,
+  });
+
   const [showDefinition, setShowDefinition] = useState(false);
   useEffect(() => {
     if (showDefinition) {
@@ -47,6 +51,8 @@ export default function WordlessGame({
       document.body.style.overscrollBehaviorY = "";
     };
   }, [showDefinition]);
+
+  const { backspace, submit, input } = game;
   useEffect(() => {
     const listener = (ev: KeyboardEvent) => {
       const key = ev.key.toLowerCase();
@@ -68,7 +74,7 @@ export default function WordlessGame({
   return (
     <div>
       <div className="flex flex-col gap-2 items-center w-full p-4">
-        {rendered.map((word) => (
+        {game.rendered.map((word) => (
           <div key={word.index} className="flex flex-row gap-1">
             {word.chars.map((char) => (
               <div
@@ -92,12 +98,12 @@ export default function WordlessGame({
         ))}
       </div>
       <div className="h-8 flex flex-row gap-2 items-center justify-center uppercase text-gray-700 dark:text-gray-300">
-        {message ? (
-          <div>{message?.content}</div>
+        {game.message ? (
+          <div>{game.message.content}</div>
         ) : (
           <div>{`猜一个${word.length}个字母的单词，你一共有${tries}次机会`}</div>
         )}
-        {state === GAME_CLEAR || state === GAME_OVER ? (
+        {game.state === GAME_CLEAR || game.state === GAME_OVER ? (
           <button
             type="button"
             className="px-2 h-8 overflow-hidden rounded flex items-center justify-center bg-gray-100 text-gray-500 dark:bg-gray-900 dark:text-gray-500"
@@ -108,7 +114,7 @@ export default function WordlessGame({
         ) : null}
       </div>
       <Keyboard
-        keyStates={keys}
+        keyStates={game.keys}
         onKeyPressed={(key) => {
           if (key === "backspace") {
             backspace();
@@ -134,6 +140,7 @@ export default function WordlessGame({
               </div>
               <div className="mt-2">
                 {detail.translations.map((trans) => (
+                  // biome-ignore lint/correctness/useJsxKeyInIterable: key is not needed here
                   <div>
                     <i>{trans.type}.&nbsp;&nbsp;</i>
                     <span>{trans.translation}</span>
@@ -142,6 +149,7 @@ export default function WordlessGame({
               </div>
               <div className="mt-2">
                 {detail.phrases.map((phrase) => (
+                  // biome-ignore lint/correctness/useJsxKeyInIterable: key is not needed here
                   <div className="mt-1">
                     <div>{phrase.phrase}</div>
                     <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -159,6 +167,20 @@ export default function WordlessGame({
           </div>
         </div>
       ) : null}
+      <div className="flex item-center justify-center px-4 pt-8 gap-4">
+        <NavLink
+          to={`/book/${bookId}`}
+          className="px-2 h-8 overflow-hidden rounded flex items-center justify-center bg-gray-100 text-gray-500 dark:bg-gray-900 dark:text-gray-500"
+        >
+          <div>换一个单词</div>
+        </NavLink>
+        <button
+          className="px-2 h-8 overflow-hidden rounded flex items-center justify-center bg-gray-100 text-gray-500 dark:bg-gray-900 dark:text-gray-500"
+          onClick={() => game.giveup()}
+        >
+          <div>认输</div>
+        </button>
+      </div>
     </div>
   );
 }
